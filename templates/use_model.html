@@ -2,20 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Use Trained Model</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-<form action="/download_pt" method="post" enctype="multipart/form-data">
-    <input type="submit" value="Download Pytorch Model">
-</form>
+<div class="app">
+    <div class="form-section">
+        <form action="/download_pt" method="post" enctype="multipart/form-data">
+            <input type="submit" value="Download Pytorch Model">
+        </form>
+    </div>
+</div>
 
-<form action="/download_onnx" method="post" enctype="multipart/form-data">
-    <input type="submit" value="Download ONNX Model">
-</form>
+<div class="app">
+    <div class="form-section">
+        <form action="/download_onnx" method="post" enctype="multipart/form-data">
+            <input type="submit" value="Download ONNX Model">
+        </form>
+    </div>
+</div>
 
-<form action="/upload_test_file">
-    <input type="file" name="file">
-    <input type="submit" value="Download ONNX Model">
-</form>
+<div class="app">
+    <div class="form-section">
+        <form action="/upload_test_file" method="post" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit" value="Upload">
+        </form>
+    </div>
+ <div class="images-section" >
+      {% for image, img_class in images %}
+        <a href="{{ url_for('serve_test_image', filename=image) }}" target="_blank">
+          <img src="{{ url_for('serve_test_image', filename=image) }}"/>
+        </a>
+          Class {{ img_class }}
+      {% endfor %}
+    </div>
+</div>
 </body>
 </html>

@@ -33,6 +33,7 @@ def index():
         os.mkdir(session['private_folder'])
         os.mkdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY1'])
         os.mkdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY2'])
+        os.mkdir(session['private_folder'] + app.config['UPLOAD_TEST'])
 
     files = os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY1'])
     images1 = []
@@ -72,7 +73,52 @@ def upload1():
 
     return redirect('/')
 
+@app.route('/upload_images1_drop', methods=['POST'])
+def upload_images1_drop():
+    try:
+        files = request.files.getlist('files')
+        for file in files:
+            # file = request.files['file']
 
+            if file:
+                extension = os.path.splitext(file.filename)[1].lower()
+
+                if extension not in app.config['ALLOWED_EXTENSIONS']:
+                    return 'File is not an image.'
+
+                file.save(os.path.join(
+                    session['private_folder'] + app.config['UPLOAD_DIRECTORY1'],
+                    secure_filename(file.filename)
+                ))
+
+    except RequestEntityTooLarge:
+        return 'File is larger than the 16MB limit.'
+
+    return redirect('/')
+
+
+@app.route('/upload_images2_drop', methods=['POST'])
+def upload_images2_drop():
+    try:
+        files = request.files.getlist('files')
+        for file in files:
+            # file = request.files['file']
+
+            if file:
+                extension = os.path.splitext(file.filename)[1].lower()
+
+                if extension not in app.config['ALLOWED_EXTENSIONS']:
+                    return 'File is not an image.'
+
+                file.save(os.path.join(
+                    session['private_folder'] + app.config['UPLOAD_DIRECTORY2'],
+                    secure_filename(file.filename)
+                ))
+
+    except RequestEntityTooLarge:
+        return 'File is larger than the 16MB limit.'
+
+    return redirect('/')
 @app.route('/upload2', methods=['POST'])
 def upload2():
     try:
@@ -111,10 +157,21 @@ def serve_image1(filename):
 def serve_image2(filename):
     return send_from_directory(session['private_folder'] + app.config['UPLOAD_DIRECTORY2'], filename)
 
+@app.route('/serve-test-image/<filename>', methods=['GET'])
+def serve_test_image(filename):
+    return send_from_directory(session['private_folder'] + app.config['UPLOAD_TEST'], filename)
+
 
 @app.route('/use_model')
 def use_model():
-    return  render_template('use_model.html')
+    files = os.listdir(session['private_folder'] + app.config['UPLOAD_TEST'])
+    images = []
+    for file in files:
+        if os.path.splitext(file)[1].lower() in app.config['ALLOWED_EXTENSIONS']:
+            c = session['learner'].inference(session['private_folder'] + app.config['UPLOAD_TEST'] + '/' + file)
+            images.append((file, c))
+
+    return render_template('use_model.html', images=images)
 
 
 @app.route('/download_pt', methods=['POST'])
@@ -147,4 +204,4 @@ def upload_test_file():
     except RequestEntityTooLarge:
         return 'File is larger than the 16MB limit.'
 
-    return redirect('/')
+    return redirect('/use_model')

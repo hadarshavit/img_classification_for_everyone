@@ -38,7 +38,7 @@ class Trainer:
     def inference(self, path):
         img = pil_to_tensor(
             resize(Image.open(path), (84, 84))
-            )
+            ).unsqueeze(0).float()
         out = self.model(img)
         predictions = out.argmax(dim=1)
 
