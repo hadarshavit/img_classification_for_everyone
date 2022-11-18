@@ -10,7 +10,7 @@ from learn2learn.algorithms.maml import MAML
 
 class Trainer:
     def __init__(self):
-        self.model: MAML = torch.load('model.pt').cpu()
+        self.model: MAML = torch.load('model.pt', map_location=torch.device('cpu')).cpu()
 
     @staticmethod
     def _open_images(path):
