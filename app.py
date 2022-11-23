@@ -11,6 +11,9 @@ import numpy as np
 app = Flask(__name__)
 app.config['UPLOAD_DIRECTORY1'] = 'uploads1/'
 app.config['UPLOAD_DIRECTORY2'] = 'uploads2/'
+app.config['UPLOAD_DIRECTORY3'] = 'uploads3/'
+app.config['UPLOAD_DIRECTORY4'] = 'uploads4/'
+app.config['UPLOAD_DIRECTORY5'] = 'uploads5/'
 app.config['UPLOAD_TEST'] = 'test/'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
 app.config['ALLOWED_EXTENSIONS'] = ['.jpg', '.jpeg', '.png', '.gif']
@@ -33,6 +36,9 @@ def index():
         os.mkdir(session['private_folder'])
         os.mkdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY1'])
         os.mkdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY2'])
+        os.mkdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY3'])
+        os.mkdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY4'])
+        os.mkdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY5'])
         os.mkdir(session['private_folder'] + app.config['UPLOAD_TEST'])
 
     files = os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY1'])
@@ -140,6 +146,136 @@ def upload2():
 
     return redirect('/')
 
+@app.route('/upload_images3_drop', methods=['POST'])
+def upload_images3_drop():
+    try:
+        files = request.files.getlist('files')
+        for file in files:
+            # file = request.files['file']
+
+            if file:
+                extension = os.path.splitext(file.filename)[1].lower()
+
+                if extension not in app.config['ALLOWED_EXTENSIONS']:
+                    return 'File is not an image.'
+
+                file.save(os.path.join(
+                    session['private_folder'] + app.config['UPLOAD_DIRECTORY3'],
+                    secure_filename(file.filename)
+                ))
+
+    except RequestEntityTooLarge:
+        return 'File is larger than the 16MB limit.'
+
+    return redirect('/')
+@app.route('/upload3', methods=['POST'])
+def upload3():
+    try:
+        file = request.files['file']
+
+        if file:
+            extension = os.path.splitext(file.filename)[1].lower()
+
+            if extension not in app.config['ALLOWED_EXTENSIONS']:
+                return 'File is not an image.'
+
+            file.save(os.path.join(
+                session['private_folder'] + app.config['UPLOAD_DIRECTORY3'],
+                secure_filename(file.filename)
+            ))
+
+    except RequestEntityTooLarge:
+        return 'File is larger than the 16MB limit.'
+
+    return redirect('/')
+
+
+@app.route('/upload_images4_drop', methods=['POST'])
+def upload_images4_drop():
+    try:
+        files = request.files.getlist('files')
+        for file in files:
+            # file = request.files['file']
+
+            if file:
+                extension = os.path.splitext(file.filename)[1].lower()
+
+                if extension not in app.config['ALLOWED_EXTENSIONS']:
+                    return 'File is not an image.'
+
+                file.save(os.path.join(
+                    session['private_folder'] + app.config['UPLOAD_DIRECTORY4'],
+                    secure_filename(file.filename)
+                ))
+
+    except RequestEntityTooLarge:
+        return 'File is larger than the 16MB limit.'
+
+    return redirect('/')
+@app.route('/upload4', methods=['POST'])
+def upload4():
+    try:
+        file = request.files['file']
+
+        if file:
+            extension = os.path.splitext(file.filename)[1].lower()
+
+            if extension not in app.config['ALLOWED_EXTENSIONS']:
+                return 'File is not an image.'
+
+            file.save(os.path.join(
+                session['private_folder'] + app.config['UPLOAD_DIRECTORY4'],
+                secure_filename(file.filename)
+            ))
+
+    except RequestEntityTooLarge:
+        return 'File is larger than the 16MB limit.'
+
+    return redirect('/')
+
+
+@app.route('/upload_images5_drop', methods=['POST'])
+def upload_images5_drop():
+    try:
+        files = request.files.getlist('files')
+        for file in files:
+            # file = request.files['file']
+
+            if file:
+                extension = os.path.splitext(file.filename)[1].lower()
+
+                if extension not in app.config['ALLOWED_EXTENSIONS']:
+                    return 'File is not an image.'
+
+                file.save(os.path.join(
+                    session['private_folder'] + app.config['UPLOAD_DIRECTORY5'],
+                    secure_filename(file.filename)
+                ))
+
+    except RequestEntityTooLarge:
+        return 'File is larger than the 16MB limit.'
+
+    return redirect('/')
+@app.route('/upload5', methods=['POST'])
+def upload5():
+    try:
+        file = request.files['file']
+
+        if file:
+            extension = os.path.splitext(file.filename)[1].lower()
+
+            if extension not in app.config['ALLOWED_EXTENSIONS']:
+                return 'File is not an image.'
+
+            file.save(os.path.join(
+                session['private_folder'] + app.config['UPLOAD_DIRECTORY5'],
+                secure_filename(file.filename)
+            ))
+
+    except RequestEntityTooLarge:
+        return 'File is larger than the 16MB limit.'
+
+    return redirect('/')
 
 @app.route('/train', methods=['POST'])
 def train():
@@ -156,6 +292,18 @@ def serve_image1(filename):
 @app.route('/serve-image2/<filename>', methods=['GET'])
 def serve_image2(filename):
     return send_from_directory(session['private_folder'] + app.config['UPLOAD_DIRECTORY2'], filename)
+
+@app.route('/serve-image3/<filename>', methods=['GET'])
+def serve_image4(filename):
+    return send_from_directory(session['private_folder'] + app.config['UPLOAD_DIRECTORY3'], filename)
+
+@app.route('/serve-image4/<filename>', methods=['GET'])
+def serve_image4(filename):
+    return send_from_directory(session['private_folder'] + app.config['UPLOAD_DIRECTORY4'], filename)
+
+@app.route('/serve-image5/<filename>', methods=['GET'])
+def serve_image5(filename):
+    return send_from_directory(session['private_folder'] + app.config['UPLOAD_DIRECTORY5'], filename)
 
 @app.route('/serve-test-image/<filename>', methods=['GET'])
 def serve_test_image(filename):

@@ -10,7 +10,17 @@ from learn2learn.algorithms.maml import MAML
 
 class Trainer:
     def __init__(self):
-        self.model: MAML = torch.load('model.pt', map_location=torch.device('cpu')).cpu()
+        pass
+
+    def get_model(self, num_classes):
+        if num_classes == 2:
+            self.model: MAML = torch.load('model.pt', map_location=torch.device('cpu'))
+        elif num_classes == 3:
+            self.model: MAML = torch.load('maml59999_3.pt', map_location=torch.device('cpu'))
+        elif num_classes == 4:
+            self.model: MAML = torch.load('maml59999_4.pt', map_location=torch.device('cpu'))
+        elif num_classes == 5:
+            self.model: MAML = torch.load('maml59999_5.pt', map_location=torch.device('cpu'))
 
     @staticmethod
     def _open_images(path):
@@ -23,16 +33,32 @@ class Trainer:
 
         return images
 
-    def fine_tune(self, class1_path, class2_path):
-        self.model = self.model.cpu()
+    def fine_tune(self, class1_path, class2_path, class3_path, class4_path, class5_path):
         class1_images = self._open_images(class1_path)
         class2_images = self._open_images(class2_path)
-        imgs = torch.stack(class1_images + class2_images).float()
+        class3_images = self._open_images(class3_path)
+        class4_images = self._open_images(class4_path)
+        class5_images = self._open_images(class5_path)
+        c = 0
+        if len(class1_images) > 0:
+            c += 1
+        if len(class2_images) > 0:
+            c += 1
+        if len(class3_images) > 0:
+            c += 1
+        if len(class4_images) > 0:
+            c += 1
+        if len(class5_images) > 0:
+            c += 1
+
+        self.get_model(c)
+
+        imgs = torch.stack(class1_images + class2_images + class3_images + class4_images + class5_images).float()
 
         labels = torch.LongTensor([0] * len(class1_images) + [1] * len(class2_images))
         print(imgs.shape, labels.shape)
 
-        loss = cross_entropy(self.model(imgs.cpu()), labels)
+        loss = cross_entropy(self.model(imgs), labels)
         self.model.adapt(loss)
 
     def inference(self, path):
