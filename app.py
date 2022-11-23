@@ -26,7 +26,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
 # before it starts deleting some, default 500
 app.config['SESSION_FILE_THRESHOLD'] = 100
 Session(app)
-
+# TODO clean all images/one class images, class names, drag and drop for the test images
 
 @app.route('/')
 def index():
@@ -55,7 +55,29 @@ def index():
         if os.path.splitext(file)[1].lower() in app.config['ALLOWED_EXTENSIONS']:
             images2.append(file)
 
-    return render_template('index.html', images1=images1, images2=images2)
+    files = os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY3'])
+    images3 = []
+
+    for file in files:
+        if os.path.splitext(file)[1].lower() in app.config['ALLOWED_EXTENSIONS']:
+            images3.append(file)
+
+    files = os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY4'])
+    images4 = []
+
+    for file in files:
+        if os.path.splitext(file)[1].lower() in app.config['ALLOWED_EXTENSIONS']:
+            images4.append(file)
+
+    files = os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY5'])
+    images5 = []
+
+    for file in files:
+        if os.path.splitext(file)[1].lower() in app.config['ALLOWED_EXTENSIONS']:
+            images5.append(file)
+
+    return render_template('index.html', images1=images1, images2=images2, images3=images3, images4=images4,
+                           images5=images5)
 
 
 @app.route('/upload1', methods=['POST'])
@@ -280,7 +302,10 @@ def upload5():
 @app.route('/train', methods=['POST'])
 def train():
     session['learner'].fine_tune(session['private_folder'] + app.config['UPLOAD_DIRECTORY1'],
-                                 session['private_folder'] + app.config['UPLOAD_DIRECTORY2'])
+                                 session['private_folder'] + app.config['UPLOAD_DIRECTORY2'],
+                                 session['private_folder'] + app.config['UPLOAD_DIRECTORY3'],
+                                 session['private_folder'] + app.config['UPLOAD_DIRECTORY4'],
+                                 session['private_folder'] + app.config['UPLOAD_DIRECTORY5'])
     return redirect('/use_model')
 
 
@@ -294,7 +319,7 @@ def serve_image2(filename):
     return send_from_directory(session['private_folder'] + app.config['UPLOAD_DIRECTORY2'], filename)
 
 @app.route('/serve-image3/<filename>', methods=['GET'])
-def serve_image4(filename):
+def serve_image3(filename):
     return send_from_directory(session['private_folder'] + app.config['UPLOAD_DIRECTORY3'], filename)
 
 @app.route('/serve-image4/<filename>', methods=['GET'])

@@ -2,7 +2,7 @@ import os
 
 import torch
 from torchvision.transforms.functional import pil_to_tensor
-from  torchvision.transforms.functional_pil import resize
+from torchvision.transforms.functional_pil import resize
 from torch.nn.functional import cross_entropy
 from PIL import Image
 from learn2learn.algorithms.maml import MAML
@@ -55,7 +55,8 @@ class Trainer:
 
         imgs = torch.stack(class1_images + class2_images + class3_images + class4_images + class5_images).float()
 
-        labels = torch.LongTensor([0] * len(class1_images) + [1] * len(class2_images))
+        labels = torch.LongTensor([0] * len(class1_images) + [1] * len(class2_images) + [2] * len(class3_images) + \
+                                  [3] * len(class4_images) + [4] * len(class5_images))
         print(imgs.shape, labels.shape)
 
         loss = cross_entropy(self.model(imgs), labels)
@@ -64,13 +65,8 @@ class Trainer:
     def inference(self, path):
         img = pil_to_tensor(
             resize(Image.open(path), (84, 84))
-            ).unsqueeze(0).float()
+        ).unsqueeze(0).float()
         out = self.model(img)
         predictions = out.argmax(dim=1)
 
-        return predictions[0].item()
-
-
-
-
-
+        return predictions[0].item() + 1
