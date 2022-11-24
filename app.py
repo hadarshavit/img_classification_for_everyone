@@ -26,7 +26,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
 # before it starts deleting some, default 500
 app.config['SESSION_FILE_THRESHOLD'] = 100
 Session(app)
-# TODO clean all images/one class images, class names, drag and drop for the test images
+# TODO class names, drag and drop for the test images
 
 @app.route('/')
 def index():
@@ -378,3 +378,41 @@ def upload_test_file():
         return 'File is larger than the 16MB limit.'
 
     return redirect('/use_model')
+
+@app.route('/clean1', methods=['POST'])
+def clean1():
+    for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY1']):
+        os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY1'], file))
+
+@app.route('/clean2', methods=['POST'])
+def clean2():
+    for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY2']):
+        os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY2'], file))
+
+@app.route('/clean3', methods=['POST'])
+def clean3():
+    for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY3']):
+        os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY3'], file))
+
+@app.route('/clean4', methods=['POST'])
+def clean4():
+    for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY4']):
+        os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY4'], file))
+
+@app.route('/clean5', methods=['POST'])
+def clean5():
+    for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY5']):
+        os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY5'], file))
+
+@app.route('/clean_all', methods=['POST'])
+def clean_all():
+    for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY1']):
+        os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY1'], file))
+    for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY2']):
+        os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY2'], file))
+    for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY3']):
+        os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY3'], file))
+    for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY4']):
+        os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY4'], file))
+    for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY5']):
+        os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY5'], file))
