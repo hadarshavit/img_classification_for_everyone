@@ -406,26 +406,31 @@ def upload_images_test_drop():
 def clean1():
     for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY1']):
         os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY1'], file))
+    return redirect('/')
 
 @app.route('/clean2', methods=['POST'])
 def clean2():
     for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY2']):
         os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY2'], file))
+    return redirect('/')
 
 @app.route('/clean3', methods=['POST'])
 def clean3():
     for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY3']):
         os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY3'], file))
+    return redirect('/')
 
 @app.route('/clean4', methods=['POST'])
 def clean4():
     for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY4']):
         os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY4'], file))
+    return redirect('/')
 
 @app.route('/clean5', methods=['POST'])
 def clean5():
     for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY5']):
         os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY5'], file))
+    return redirect('/')
 
 @app.route('/clean_all', methods=['POST'])
 def clean_all():
