@@ -380,7 +380,7 @@ def upload_test_file():
     return redirect('/use_model')
 
 @app.route('/upload_images_test_drop', methods=['POST'])
-def upload_images3_drop():
+def upload_images_test_drop():
     try:
         files = request.files.getlist('files')
         for file in files:
