@@ -72,7 +72,7 @@
             xhr.send(fd);
         }, false);
     </script>
- <div class="images-section" >
+ <div class="images-section" style="height: 100%">
       {% for image, img_class in images %}
         <a href="{{ url_for('serve_test_image', filename=image) }}" target="_blank">
           <img src="{{ url_for('serve_test_image', filename=image) }}"/>
