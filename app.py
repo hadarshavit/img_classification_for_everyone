@@ -379,6 +379,29 @@ def upload_test_file():
 
     return redirect('/use_model')
 
+@app.route('/upload_images_test_drop', methods=['POST'])
+def upload_images3_drop():
+    try:
+        files = request.files.getlist('files')
+        for file in files:
+            # file = request.files['file']
+
+            if file:
+                extension = os.path.splitext(file.filename)[1].lower()
+
+                if extension not in app.config['ALLOWED_EXTENSIONS']:
+                    return 'File is not an image.'
+
+                file.save(os.path.join(
+                    session['private_folder'] + app.config['UPLOAD_TEST'],
+                    secure_filename(file.filename)
+                ))
+
+    except RequestEntityTooLarge:
+        return 'File is larger than the 16MB limit.'
+
+    return redirect('/use_model')
+
 @app.route('/clean1', methods=['POST'])
 def clean1():
     for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY1']):

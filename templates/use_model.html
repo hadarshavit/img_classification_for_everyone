@@ -31,6 +31,47 @@
             <input type="submit" value="Upload">
         </form>
     </div>
+<div id="drop_area" style="padding:100px; border: 1px solid black">
+        Drag and drop your files here to upload.
+    </div>
+    <script lang="javascript">
+        // prevent the default behavior of web browser
+        ['dragleave', 'drop', 'dragenter', 'dragover'].forEach(function (evt) {
+            document.addEventListener(evt, function (e) {
+                e.preventDefault();
+            }, false);
+        });
+
+        var drop_area = document.getElementById('drop_area');
+        drop_area.addEventListener('drop', function (e) {
+            e.preventDefault();
+            var fileList = e.dataTransfer.files; // the files to be uploaded
+            if (fileList.length == 0) {
+                return false;
+            }
+
+            // we use XMLHttpRequest here instead of fetch, because with the former we can easily implement progress and speed.
+            var xhr = new XMLHttpRequest();
+            xhr.open('post', '/upload_images_test_drop', true); // aussume that the url /upload handles uploading.
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // uploading is successful
+                    location.reload(); // please replace with your own logic
+                }
+            };
+
+
+
+            // send files to server
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            var fd = new FormData();
+            for (let file of fileList) {
+                fd.append('files', file);
+            }
+            lastTime = Date.now();
+            xhr.send(fd);
+        }, false);
+    </script>
  <div class="images-section" >
       {% for image, img_class in images %}
         <a href="{{ url_for('serve_test_image', filename=image) }}" target="_blank">
