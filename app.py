@@ -444,3 +444,4 @@ def clean_all():
         os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY4'], file))
     for file in os.listdir(session['private_folder'] + app.config['UPLOAD_DIRECTORY5']):
         os.remove(os.path.join(session['private_folder'] + app.config['UPLOAD_DIRECTORY5'], file))
+    return redirect('/')
