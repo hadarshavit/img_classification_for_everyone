@@ -28,7 +28,7 @@ class Trainer:
         for file in os.listdir(path):
             full_path = os.path.join(path, file)
             images.append(pil_to_tensor(
-                resize(Image.open(full_path), [84, 84])
+                resize(Image.open(full_path).convert('RGB'), [84, 84])
             ))
 
         return images
