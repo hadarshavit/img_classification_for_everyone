@@ -11,7 +11,7 @@ To contrast the use of the benchmark interface with directly instantiating mini-
 
 import random
 import numpy as np
-
+import argparse
 import torch
 from torch import nn, optim
 import logging
@@ -64,7 +64,7 @@ def main(
         cuda=True,
         seed=42,
 ):
-    wandb.init(project='mms')
+    wandb.init(project='mms', config={'ways': ways})
     logging.basicConfig(level=logging.DEBUG)
     random.seed(seed)
     np.random.seed(seed)
@@ -123,7 +123,7 @@ def main(
                                                                device)
             meta_valid_error += evaluation_error.item()
             meta_valid_accuracy += evaluation_accuracy.item()
-        torch.save(maml, f'/data1/s3092593/maml/maml{iteration}.pt')
+        
         # Print some metrics
         logging.info(f'Iteration {iteration}')
         logging.info(f'Meta Train Error {meta_train_error / meta_batch_size}')
@@ -158,7 +158,10 @@ def main(
         meta_test_accuracy += evaluation_accuracy.item()
     logging.info('Meta Test Error', meta_test_error / meta_batch_size)
     logging.info('Meta Test Accuracy', meta_test_accuracy / meta_batch_size)
-
+    torch.save(maml, f'/data1/s3092593/maml/maml{iteration}_{ways}.pt')
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description='MAML')
+    parser.add_argument('--ways', type=int, default=5)
+
+    main(ways=parser.parse_args().ways)
